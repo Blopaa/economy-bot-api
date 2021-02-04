@@ -7,7 +7,7 @@ import { getRepository } from 'typeorm';
 
 @Injectable()
 export class UserServerServices {
-  async create(serverId: string, userId: string): Promise<void | ErrorEvent> {
+  async create(serverId: string, userId: string): Promise<void> {
     try {
       const userServer = await getRepository(UserServer).create();
       const server = await getRepository(Server)
@@ -41,14 +41,14 @@ export class UserServerServices {
     }
   }
   async updateCoins(
-    serverId: string,
-    userId: string,
+    server: Server,
+    user: User,
     body: { customCoinsSet: number },
   ): Promise<void | Error> {
     try {
       const userServer = await getRepository(UserServer)
         .findOneOrFail({
-          where: { server: serverId, user: userId },
+          where: { server: server, user: user },
         })
         .catch(() => {
           throw new ErrorDto(
@@ -69,6 +69,42 @@ export class UserServerServices {
             "couldn't update coins",
           );
         });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async shareCoins(
+    server: Server,
+    payer: User,
+    payed: User,
+    customCoinsSet: number,
+  ): Promise<void> {
+    try {
+      const payerUserServer = await getRepository(UserServer)
+        .findOneOrFail({where: {server: server, user: payer}})
+        .catch(() => {
+          throw new ErrorDto(
+            HttpStatus.NOT_FOUND,
+            "payer userSever relation not found",
+          );
+        });
+      const payedUserServer = await getRepository(UserServer)
+        .findOneOrFail({
+          where: { server: server, user: payed },
+        })
+        .catch(() => {
+          throw new ErrorDto(
+            HttpStatus.NOT_FOUND,
+            "payerd userServer relation not found",
+          );
+        });
+
+        payerUserServer.coins -= customCoinsSet;
+        payedUserServer.coins += customCoinsSet;
+
+        getRepository(UserServer).save(payedUserServer)
+        getRepository(UserServer).save(payerUserServer)
     } catch (err) {
       throw err;
     }
