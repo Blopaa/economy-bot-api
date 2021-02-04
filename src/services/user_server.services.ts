@@ -41,8 +41,28 @@ export class UserServerServices {
     }
   }
   async updateCoins(serverId: string, userId: string): Promise<void | Error> {
-    const userServer = getRepository(UserServer).findOne({
-      where: { server: serverId, user: userId },
-    });
+    try {
+      const userServer = await getRepository(UserServer)
+        .findOneOrFail({
+          where: { server: serverId, user: userId },
+        })
+        .catch(() => {
+          throw new ErrorDto(
+            HttpStatus.NOT_FOUND,
+            "relation between sever and user wasn't found",
+          );
+        });
+      userServer.coins += 1;
+      getRepository(UserServer)
+        .save(userServer)
+        .catch(() => {
+          throw new ErrorDto(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "couldn't update coins",
+          );
+        });
+    } catch (err) {
+      throw err;
+    }
   }
 }
