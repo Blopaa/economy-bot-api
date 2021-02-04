@@ -4,11 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServerController } from './controllers/server.controllers';
 import { ServerSettingsController } from './controllers/serverSettings.controllers';
 import { UserController } from './controllers/user.controllers';
+import { userServerController } from './controllers/user_server.controllers';
 import { VerifyBotToken } from './middlewares/verifyBotToken.middleware';
 import { pgConfig } from './orm.config';
 import { ServerServices } from './services/server.services';
 import { ServerSettingsServices } from './services/serverSettings.services';
 import { UserServices } from './services/user.services';
+import { UserServerServices } from './services/user_server.services';
 
 @Module({
   imports: [
@@ -18,8 +20,8 @@ import { UserServices } from './services/user.services';
       isGlobal: true,
     }),
   ],
-  controllers: [UserController, ServerController, ServerSettingsController],
-  providers: [UserServices, ServerServices, ServerSettingsServices],
+  controllers: [UserController, ServerController, ServerSettingsController, userServerController],
+  providers: [UserServices, ServerServices, ServerSettingsServices, UserServerServices],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
