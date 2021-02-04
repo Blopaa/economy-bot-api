@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpException,
+  Param,
   Post,
 } from '@nestjs/common';
 import { ErrorDto } from 'src/dto/error.dto';
@@ -19,5 +21,14 @@ export class UserController {
     this.userService.createUser(user).catch((err: ErrorDto) => {
       throw new HttpException(err.message, err.status);
     });
+  }
+
+  @Get('/:userId')
+  async getUserByDiscordId(@Param('userId') userId: string) {
+    return await this.userService
+      .getUserByDiscordId(userId)
+      .catch((err: ErrorDto) => {
+        throw new HttpException(err.message, err.status);
+      });
   }
 }

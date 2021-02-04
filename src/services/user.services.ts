@@ -20,4 +20,18 @@ export class UserServices {
       throw err;
     }
   }
+
+  async getUserByDiscordId(userId: string): Promise<User> {
+    try {
+      const user = getRepository(User)
+        .findOneOrFail({ where: { discordId: userId } })
+        .catch(() => {
+          throw new ErrorDto(HttpStatus.NOT_FOUND, 'user not found');
+        });
+
+      return user;
+    } catch (err) {
+      throw err;
+    }
+  }
 }
