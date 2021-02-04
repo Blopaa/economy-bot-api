@@ -23,4 +23,16 @@ export class ServerServices {
       throw err;
     }
   }
+
+  async getServerByDiscordId(serverId: string): Promise<Server> {
+    try {
+      const server = getRepository(Server)
+        .findOneOrFail({where: {serverId: serverId}})
+        .catch(() => {
+          throw new ErrorDto(HttpStatus.NOT_FOUND, 'server not found');
+        });
+
+      return server
+    } catch (err) {}
+  }
 }
