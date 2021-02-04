@@ -1,5 +1,6 @@
-import {Column, Entity} from 'typeorm';
+import {Column, Entity, OneToMany} from 'typeorm';
 import { BaseEntity } from './baseEntity.entity';
+import { UserServer } from './user_server.entity';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -7,4 +8,6 @@ export class User extends BaseEntity {
     discordId: string;
     @Column()
     discordTag: string;
+    @OneToMany(() => UserServer, us => us.user)
+    userServer: UserServer[];
 }
