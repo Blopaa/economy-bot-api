@@ -15,14 +15,14 @@ export class UserServerServices {
           where: { serverId: serverId },
         })
         .catch((err) => {
-            console.log(err)
-          throw new ErrorDto(HttpStatus.BAD_REQUEST, "server not found");
+          console.log(err);
+          throw new ErrorDto(HttpStatus.BAD_REQUEST, 'server not found');
         });
 
       const user = await getRepository(User)
         .findOneOrFail({ where: { discordId: userId } })
         .catch(() => {
-          throw new ErrorDto(HttpStatus.BAD_REQUEST, "user not found");
+          throw new ErrorDto(HttpStatus.BAD_REQUEST, 'user not found');
         });
 
       userServer.server = server;
@@ -31,7 +31,10 @@ export class UserServerServices {
       await getRepository(UserServer)
         .save(userServer)
         .catch(() => {
-          throw new ErrorDto(HttpStatus.BAD_REQUEST, "couldn't save succesfully");
+          throw new ErrorDto(
+            HttpStatus.BAD_REQUEST,
+            "couldn't save succesfully",
+          );
         });
     } catch (err) {
       throw err;

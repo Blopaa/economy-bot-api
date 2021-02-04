@@ -3,9 +3,9 @@ import {
   Controller,
   HttpCode,
   HttpException,
-  HttpStatus,
   Post,
 } from '@nestjs/common';
+import { ErrorDto } from 'src/dto/error.dto';
 import { User } from 'src/entities/user.entity';
 import { UserServices } from 'src/services/user.services';
 
@@ -16,11 +16,8 @@ export class UserController {
   @Post('/add')
   @HttpCode(200)
   createUser(@Body() user: User): void {
-    if (!user.discordId || !user.discordTag)
-      throw new HttpException(
-        'not enought params, discordId and discordTag required',
-        HttpStatus.BAD_REQUEST,
-      );
-    this.userService.createUser(user);
+    this.userService.createUser(user).catch((err: ErrorDto) => {
+      throw new HttpException(err.message, err.status);
+    });
   }
 }

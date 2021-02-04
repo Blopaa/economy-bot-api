@@ -1,5 +1,6 @@
 import { Body, Controller, HttpException, HttpStatus, Param, Put } from '@nestjs/common';
 import { ConfigColumnDto } from 'src/dto/configColumn.dto';
+import { ErrorDto } from 'src/dto/error.dto';
 import { ServerSettingsServices } from 'src/services/serverSettings.services';
 
 @Controller('serversettings')
@@ -12,8 +13,8 @@ export class ServerSettingsController {
     @Body() configColumn: ConfigColumnDto,
     @Param('id') id: string
   ) {
-    this.serverSettingsServices.setConfigColumn(configColumn, id).catch(err => {
-        throw new HttpException('error', HttpStatus.BAD_REQUEST);
+    this.serverSettingsServices.setConfigColumn(configColumn, id).catch((err: ErrorDto) => {
+        throw new HttpException(err.message, err.status);
     });
   }
 }
