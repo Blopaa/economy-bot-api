@@ -40,7 +40,11 @@ export class UserServerServices {
       throw err;
     }
   }
-  async updateCoins(serverId: string, userId: string): Promise<void | Error> {
+  async updateCoins(
+    serverId: string,
+    userId: string,
+    body: { customCoinsSet: number },
+  ): Promise<void | Error> {
     try {
       const userServer = await getRepository(UserServer)
         .findOneOrFail({
@@ -52,7 +56,11 @@ export class UserServerServices {
             "relation between sever and user wasn't found",
           );
         });
-      userServer.coins += 1;
+      if (!body.customCoinsSet) {
+        (await userServer).coins += 1;
+      } else {
+        (await userServer).coins += body.customCoinsSet;
+      }
       getRepository(UserServer)
         .save(userServer)
         .catch(() => {

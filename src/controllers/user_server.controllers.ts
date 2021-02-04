@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   HttpException,
   HttpStatus,
@@ -26,9 +27,9 @@ export class userServerController {
   }
 
   @Put('/coins/:serverId/:userId')
-  async updateCoins(@Param('serverId') serverId: string, @Param('userId') userId: string) {
+  async updateCoins(@Param('serverId') serverId: string, @Param('userId') userId: string, @Body() body: {customCoinsSet: number}) {
     await this.userServerServices
-      .updateCoins(serverId, userId)
+      .updateCoins(serverId, userId, body)
       .catch((err: ErrorDto) => {
         throw new HttpException(err.message, err.status);
       });
