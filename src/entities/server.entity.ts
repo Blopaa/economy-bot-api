@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { BaseEntity } from "./baseEntity.entity";
 import { ServerSettings } from "./ServerSettings.entity";
 import { UserServer } from "./user_server.entity";
@@ -10,5 +10,6 @@ export class Server extends BaseEntity {
     @OneToMany(() => UserServer, us => us.server)
     userServer: UserServer[];
     @OneToOne(() => ServerSettings, ss => ss.server)
+    @JoinColumn()
     serverSettings: ServerSettings;
 }

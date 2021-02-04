@@ -4,25 +4,33 @@ import { Server } from './server.entity';
 
 @Entity('server_settings')
 export class ServerSettings extends BaseEntity {
-  @Column()
-  embedColor: string;
-  @Column()
-  prefix: string;
-  @Column()
-  supportCategoryId: string;
-  @Column()
-  warningRoleId: string;
-  @Column()
-  adminRoleId: string;
-  @Column()
-  guestRoleId: string;
-  @Column()
-  everyoneRoleId: string;
-  @Column()
-  suggestionChannelId: string;
-  @Column()
-  welcomeChannelId: string;
+  @Column({ nullable: true })
+  embedColor?: string;
 
-  @OneToOne(() => Server, server => server.serverSettings)
+  @Column({ nullable: true })
+  prefix?: string;
+
+  @Column({ nullable: true })
+  supportCategoryId?: string;
+
+  @Column({ nullable: true })
+  warningRoleId?: string;
+
+  @Column({ nullable: true })
+  adminRoleId?: string;
+
+  @Column({ nullable: true })
+  guestRoleId?: string;
+
+  @Column({ nullable: true })
+  everyoneRoleId?: string;
+
+  @Column({ nullable: true })
+  suggestionChannelId?: string;
+
+  @Column({ nullable: true })
+  welcomeChannelId?: string;
+
+  @OneToOne(() => Server, (server) => server.serverSettings)
   server: Server;
 }
