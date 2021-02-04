@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Param,
@@ -84,5 +85,24 @@ export class userServerController {
       payed,
       body.customCoinsSet,
     );
+  }
+
+  @Get('/coins')
+  async getUserCoins(@Body() body: { serverId: string; userId: string }) {
+    const server = await this.serverServices
+      .getServerByDiscordId(body.serverId)
+      .catch((err: ErrorDto) => {
+        throw new HttpException(err.message, err.status);
+      });
+    const user = await this.userServices
+      .getUserByDiscordId(body.userId)
+      .catch((err: ErrorDto) => {
+        throw new HttpException(err.message, err.status);
+      });
+    return this.userServerServices
+      .getUserCoins(server, user)
+      .catch((err: ErrorDto) => {
+        throw new HttpException(err.message, err.status);
+      });
   }
 }

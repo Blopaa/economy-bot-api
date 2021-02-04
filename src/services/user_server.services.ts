@@ -82,11 +82,11 @@ export class UserServerServices {
   ): Promise<void> {
     try {
       const payerUserServer = await getRepository(UserServer)
-        .findOneOrFail({where: {server: server, user: payer}})
+        .findOneOrFail({ where: { server: server, user: payer } })
         .catch(() => {
           throw new ErrorDto(
             HttpStatus.NOT_FOUND,
-            "payer userSever relation not found",
+            'payer userSever relation not found',
           );
         });
       const payedUserServer = await getRepository(UserServer)
@@ -96,15 +96,32 @@ export class UserServerServices {
         .catch(() => {
           throw new ErrorDto(
             HttpStatus.NOT_FOUND,
-            "payerd userServer relation not found",
+            'payerd userServer relation not found',
           );
         });
 
-        payerUserServer.coins -= customCoinsSet;
-        payedUserServer.coins += customCoinsSet;
+      payerUserServer.coins -= customCoinsSet;
+      payedUserServer.coins += customCoinsSet;
 
-        getRepository(UserServer).save(payedUserServer)
-        getRepository(UserServer).save(payerUserServer)
+      getRepository(UserServer).save(payedUserServer);
+      getRepository(UserServer).save(payerUserServer);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getUserCoins(server: Server, user: User): Promise<{}> {
+    try {
+      const userServer = await getRepository(UserServer)
+        .findOneOrFail({ where: { server: server, user: user } })
+        .catch(() => {
+          throw new ErrorDto(
+            HttpStatus.NOT_FOUND,
+            'the relation between the server and the user was not found',
+          );
+        });
+
+       return {coins: userServer.coins}
     } catch (err) {
       throw err;
     }
