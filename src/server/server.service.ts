@@ -1,20 +1,27 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorDto } from 'src/dto/error.dto';
-import { Server } from 'src/entities/server.entity';
-import { ServerSettings } from 'src/entities/ServerSettings.entity';
-import { getRepository } from 'typeorm';
+import { Server } from 'src/server/entities/server.entity';
+import { Repository } from 'typeorm';
+import { CreateServerDto } from './dto/create-server.dto';
+import { UpdateServerDto } from './dto/update-server.dto';
 
 @Injectable()
-export class ServerServices {
-  async createServer(newServer: Server): Promise<void> {
+export class ServerService {
+  constructor(
+    @InjectRepository(Server)
+    private serverRepository: Repository<Server>,
+  ) {}
+
+  async createServer(newServer: CreateServerDto): Promise<void> {
     try {
       if (!newServer)
         throw new ErrorDto(
           HttpStatus.BAD_REQUEST,
           'not enought data, server must have discordId and name',
         );
-      const server = await getRepository(Server).create(newServer);
-      await getRepository(Server)
+      const server = await this.serverRepository.create(newServer);
+      await this.serverRepository
         .save(server)
         .catch(() => {
           throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
@@ -27,7 +34,7 @@ export class ServerServices {
         });
 
       server.serverSettings = serverSettings;
-      await getRepository(Server)
+      await this.serverRepository
         .save(server)
         .catch(() => {
           throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
@@ -39,8 +46,11 @@ export class ServerServices {
 
   async getServerByDiscordId(serverId: string): Promise<Server> {
     try {
-      const server = getRepository(Server)
-        .findOneOrFail({ where: { serverId: serverId }, relations: ['serverSettings'] })
+      const server = this.serverRepository
+        .findOneOrFail({
+          where: { serverId: serverId },
+          relations: ['serverSettings'],
+        })
         .catch(() => {
           throw new ErrorDto(HttpStatus.NOT_FOUND, 'server not found');
         });
@@ -48,4 +58,20 @@ export class ServerServices {
       return server;
     } catch (err) {}
   }
+
+  // findAll() {
+  //   return `This action returns all server`;
+  // }
+
+  // findOne(id: number) {
+  //   return `This action returns a #${id} server`;
+  // }
+
+  // update(id: number, updateServerDto: UpdateServerDto) {
+  //   return `This action updates a #${id} server`;
+  // }
+
+  // remove(id: number) {
+  //   return `This action removes a #${id} server`;
+  // }
 }

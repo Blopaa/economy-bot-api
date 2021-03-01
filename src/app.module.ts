@@ -5,6 +5,7 @@ const morgan = require('morgan')
 import { VerifyBotToken } from './middlewares/verifyBotToken.middleware';
 import { pgConfig } from './orm.config';
 import { UserModule } from './user/user.module';
+import { ServerModule } from './server/server.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UserModule } from './user/user.module';
       isGlobal: true,
     }),
     UserModule,
+    ServerModule,
   ],
   controllers: [],
   providers: [],
