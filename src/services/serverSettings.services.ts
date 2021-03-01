@@ -9,19 +9,36 @@ import { getRepository } from 'typeorm';
 export class ServerSettingsServices {
   async setConfigColumn(
     configColumn: ConfigColumnDto,
-    id: string,
+    server: Server,
   ): Promise<void | Error> {
     try {
-      const serverSettings = (
-        await getRepository(Server).findOne(id, {
-          relations: ['serverSettings'],
-        })
-      ).serverSettings;
-
-      if(!serverSettings) throw new ErrorDto(HttpStatus.NOT_FOUND, "server settings not found")
+      const serverSettings = await getRepository(ServerSettings)
+        .findOneOrFail(server.serverSettings.id)
+        .catch(() => {
+          throw new ErrorDto(
+            HttpStatus.BAD_REQUEST,
+            'server settings not found',
+          );
+        });
 
       serverSettings[configColumn.columnName] = configColumn.newValue;
       getRepository(ServerSettings).save(serverSettings);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getConfigColumn(nameColumn: string, server: Server): Promise<{}> {
+    try {
+      const serverSettings = await getRepository(ServerSettings)
+        .findOneOrFail(server.serverSettings.id)
+        .catch(() => {
+          throw new ErrorDto(
+            HttpStatus.BAD_REQUEST,
+            'server settings not found',
+          );
+        });
+      return serverSettings[nameColumn];
     } catch (err) {
       throw err;
     }

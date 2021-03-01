@@ -26,8 +26,10 @@ export class userServerController {
     @Param('serverId') serverId: string,
     @Param('userId') userId: string,
   ) {
+    const server = await this.serverServices.getServerByDiscordId(serverId);
+    const user = await this.userServices.getUserByDiscordId(userId);
     await this.userServerServices
-      .create(serverId, userId)
+      .create(server, user)
       .catch((err: ErrorDto) => {
         throw new HttpException({ message: err.message }, err.status);
       });
@@ -64,38 +66,35 @@ export class userServerController {
       serverId: string;
     },
   ) {
-    const server = await this.serverServices
-      .getServerByDiscordId(body.serverId)
-      .catch((err: ErrorDto) => {
-        throw new HttpException(err.message, err.status);
-      });
-    const payed = await this.userServices
-      .getUserByDiscordId(body.payedId)
-      .catch((err: ErrorDto) => {
-        throw new HttpException(err.message, err.status);
-      });
-    const payer = await this.userServices
-      .getUserByDiscordId(body.payerId)
-      .catch((err: ErrorDto) => {
-        throw new HttpException(err.message, err.status);
-      });
-    this.userServerServices.shareCoins(
-      server,
-      payer,
-      payed,
-      body.customCoinsSet,
-    );
+    try {
+      const server = await this.serverServices.getServerByDiscordId(
+        body.serverId,
+      );
+
+      const payed = await this.userServices.getUserByDiscordId(body.payedId);
+
+      const payer = await this.userServices.getUserByDiscordId(body.payerId);
+
+      await this.userServerServices.shareCoins(
+        server,
+        payer,
+        payed,
+        body.customCoinsSet,
+      );
+    } catch (err) {
+      throw new HttpException(err.message, err.status);
+    }
   }
 
-  @Get('/coins')
-  async getUserCoins(@Body() body: { serverId: string; userId: string }) {
+  @Get('/coins/:userId/:serverId')
+  async getUserCoins(@Param() params: { serverId: string; userId: string }) {
     const server = await this.serverServices
-      .getServerByDiscordId(body.serverId)
+      .getServerByDiscordId(params.serverId)
       .catch((err: ErrorDto) => {
         throw new HttpException(err.message, err.status);
       });
     const user = await this.userServices
-      .getUserByDiscordId(body.userId)
+      .getUserByDiscordId(params.userId)
       .catch((err: ErrorDto) => {
         throw new HttpException(err.message, err.status);
       });

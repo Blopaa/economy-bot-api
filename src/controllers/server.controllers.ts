@@ -16,8 +16,8 @@ import { ServerServices } from 'src/services/server.services';
 export class ServerController {
   constructor(private readonly serverServices: ServerServices) {}
   @Post('/add')
-  createServer(@Body() server: Server): void {
-    this.serverServices.createServer(server).catch((err: ErrorDto) => {
+  async createServer(@Body() server: Server): Promise<void> {
+    await this.serverServices.createServer(server).catch((err: ErrorDto) => {
       throw new HttpException({ message: err.message }, err.status);
     });
   }

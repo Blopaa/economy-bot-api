@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+const morgan = require('morgan')
 import { ServerController } from './controllers/server.controllers';
 import { ServerSettingsController } from './controllers/serverSettings.controllers';
 import { UserController } from './controllers/user.controllers';
@@ -26,7 +27,7 @@ import { UserServerServices } from './services/user_server.services';
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(VerifyBotToken)
+      .apply(morgan('dev'), VerifyBotToken)
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

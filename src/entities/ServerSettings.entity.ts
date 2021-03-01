@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { BaseEntity } from './baseEntity.entity';
 import { Server } from './server.entity';
 
@@ -31,6 +31,6 @@ export class ServerSettings extends BaseEntity {
   @Column({ nullable: true })
   welcomeChannelId?: string;
 
-  @OneToOne(() => Server, (server) => server.serverSettings)
+  @OneToOne(() => Server, (server) => server.serverSettings, {nullable: false})
   server: Server;
 }

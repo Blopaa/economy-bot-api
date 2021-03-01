@@ -6,7 +6,7 @@ import { getRepository } from 'typeorm';
 
 @Injectable()
 export class ServerServices {
-  async createServer(newServer: Server): Promise<void | Error> {
+  async createServer(newServer: Server): Promise<void> {
     try {
       if (!newServer)
         throw new ErrorDto(
@@ -14,11 +14,24 @@ export class ServerServices {
           'not enought data, server must have discordId and name',
         );
       const server = await getRepository(Server).create(newServer);
+      await getRepository(Server)
+        .save(server)
+        .catch(() => {
+          throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
+        });
       const serverSettings = await getRepository(ServerSettings).create();
-      await getRepository(ServerSettings).save(serverSettings);
+      await getRepository(ServerSettings)
+        .save(serverSettings)
+        .catch(() => {
+          throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
+        });
 
       server.serverSettings = serverSettings;
-      await getRepository(Server).save(server);
+      await getRepository(Server)
+        .save(server)
+        .catch(() => {
+          throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
+        });
     } catch (err) {
       throw err;
     }
@@ -27,12 +40,12 @@ export class ServerServices {
   async getServerByDiscordId(serverId: string): Promise<Server> {
     try {
       const server = getRepository(Server)
-        .findOneOrFail({where: {serverId: serverId}})
+        .findOneOrFail({ where: { serverId: serverId }, relations: ['serverSettings'] })
         .catch(() => {
           throw new ErrorDto(HttpStatus.NOT_FOUND, 'server not found');
         });
 
-      return server
+      return server;
     } catch (err) {}
   }
 }

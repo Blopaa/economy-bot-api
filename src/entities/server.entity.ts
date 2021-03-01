@@ -7,7 +7,7 @@ import { UserServer } from "./user_server.entity";
 export class Server extends BaseEntity {
     @Column()
     name: string;
-    @Column()
+    @Column({unique: true})
     serverId: string;
     @OneToMany(() => UserServer, us => us.server)
     userServer: UserServer[];

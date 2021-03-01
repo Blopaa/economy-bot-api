@@ -7,23 +7,17 @@ import { getRepository } from 'typeorm';
 
 @Injectable()
 export class UserServerServices {
-  async create(serverId: string, userId: string): Promise<void> {
+  async create(server: Server, user: User): Promise<void> {
     try {
-      const userServer = await getRepository(UserServer).create();
-      const server = await getRepository(Server)
-        .findOneOrFail({
-          where: { serverId: serverId },
+      if (
+        await getRepository(UserServer).findOne({
+          where: { server: server, user: user },
         })
-        .catch((err) => {
-          console.log(err);
-          throw new ErrorDto(HttpStatus.BAD_REQUEST, 'server not found');
-        });
+      ) {
+        throw new ErrorDto(HttpStatus.BAD_REQUEST, 'userServer alredy created');
+      }
 
-      const user = await getRepository(User)
-        .findOneOrFail({ where: { discordId: userId } })
-        .catch(() => {
-          throw new ErrorDto(HttpStatus.BAD_REQUEST, 'user not found');
-        });
+      const userServer = await getRepository(UserServer).create();
 
       userServer.server = server;
       userServer.user = user;
@@ -100,11 +94,17 @@ export class UserServerServices {
           );
         });
 
-      payerUserServer.coins -= customCoinsSet;
-      payedUserServer.coins += customCoinsSet;
-
-      getRepository(UserServer).save(payedUserServer);
-      getRepository(UserServer).save(payerUserServer);
+      if (payerUserServer.coins >= customCoinsSet && customCoinsSet >= 0) {
+        payerUserServer.coins -= customCoinsSet;
+        payedUserServer.coins += customCoinsSet;
+        await getRepository(UserServer).save(payedUserServer);
+        await getRepository(UserServer).save(payerUserServer);
+      } else {
+        throw new ErrorDto(
+          HttpStatus.BAD_REQUEST,
+          'no coins enoguth or the number was under 0',
+        );
+      }
     } catch (err) {
       throw err;
     }
@@ -121,7 +121,7 @@ export class UserServerServices {
           );
         });
 
-       return {coins: userServer.coins}
+      return { coins: userServer.coins };
     } catch (err) {
       throw err;
     }
