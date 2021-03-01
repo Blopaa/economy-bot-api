@@ -1,35 +1,35 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { BaseEntity } from './baseEntity.entity';
-import { Server } from './server.entity';
+import { BaseEntity } from '../../entities/baseEntity.entity';
+import { Server } from '../../server/entities/server.entity';
 
 @Entity('server_settings')
 export class ServerSettings extends BaseEntity {
   @Column({ nullable: true })
-  embedColor?: string;
+  embedColor: string;
 
   @Column({ nullable: true })
-  prefix?: string;
+  prefix: string;
 
   @Column({ nullable: true })
-  supportCategoryId?: string;
+  supportCategoryId: string;
 
   @Column({ nullable: true })
-  warningRoleId?: string;
+  warningRoleId: string;
 
   @Column({ nullable: true })
-  adminRoleId?: string;
+  adminRoleId: string;
 
   @Column({ nullable: true })
-  guestRoleId?: string;
+  guestRoleId: string;
 
   @Column({ nullable: true })
-  everyoneRoleId?: string;
+  everyoneRoleId: string;
 
   @Column({ nullable: true })
-  suggestionChannelId?: string;
+  suggestionChannelId: string;
 
   @Column({ nullable: true })
-  welcomeChannelId?: string;
+  welcomeChannelId: string;
 
   @OneToOne(() => Server, (server) => server.serverSettings, {nullable: false})
   server: Server;

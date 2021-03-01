@@ -6,6 +6,7 @@ import { VerifyBotToken } from './middlewares/verifyBotToken.middleware';
 import { pgConfig } from './orm.config';
 import { UserModule } from './user/user.module';
 import { ServerModule } from './server/server.module';
+import { ServerSettingsModule } from './server-settings/server-settings.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ServerModule } from './server/server.module';
     }),
     UserModule,
     ServerModule,
+    ServerSettingsModule,
   ],
   controllers: [],
   providers: [],

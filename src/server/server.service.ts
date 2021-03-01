@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorDto } from 'src/dto/error.dto';
+import { ServerSettings } from 'src/server-settings/entities/server-settings.entity';
 import { Server } from 'src/server/entities/server.entity';
 import { Repository } from 'typeorm';
 import { CreateServerDto } from './dto/create-server.dto';
@@ -11,6 +12,9 @@ export class ServerService {
   constructor(
     @InjectRepository(Server)
     private serverRepository: Repository<Server>,
+
+    @InjectRepository(ServerSettings)
+    private serverSettingsRespository: Repository<ServerSettings>
   ) {}
 
   async createServer(newServer: CreateServerDto): Promise<void> {
@@ -26,8 +30,8 @@ export class ServerService {
         .catch(() => {
           throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
         });
-      const serverSettings = await getRepository(ServerSettings).create();
-      await getRepository(ServerSettings)
+      const serverSettings = await this.serverSettingsRespository.create();
+      await this.serverSettingsRespository
         .save(serverSettings)
         .catch(() => {
           throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');

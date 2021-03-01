@@ -7,6 +7,7 @@ import { Server } from 'src/server/entities/server.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Server])],
   controllers: [ServerController],
-  providers: [ServerService]
+  providers: [ServerService],
+  exports: [ServerService]
 })
 export class ServerModule {}
