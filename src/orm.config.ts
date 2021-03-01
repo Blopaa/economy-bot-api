@@ -9,6 +9,6 @@ export const pgConfig: TypeOrmModuleOptions = {
     database: "Stackly Bot",
     synchronize: true,
     entities: [
-       "dist/**/*.entity{.ts,.js}"
+        'dist/**/*.entity{.ts,.js}'
     ]
 }
