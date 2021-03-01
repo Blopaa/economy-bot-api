@@ -7,6 +7,7 @@ import { pgConfig } from './orm.config';
 import { UserModule } from './user/user.module';
 import { ServerModule } from './server/server.module';
 import { ServerSettingsModule } from './server-settings/server-settings.module';
+import { UserServerModule } from './user-server/user-server.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ServerSettingsModule } from './server-settings/server-settings.module';
     UserModule,
     ServerModule,
     ServerSettingsModule,
+    UserServerModule,
   ],
   controllers: [],
   providers: [],

@@ -2,7 +2,7 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigColumnDto } from 'src/dto/configColumn.dto';
 import { ErrorDto } from 'src/dto/error.dto';
-import { ServerSettings } from 'src/entities/ServerSettings.entity';
+import { ServerSettings } from 'src/server-settings/entities/server-settings.entity';
 import { ServerService } from 'src/server/server.service';
 import { Repository } from 'typeorm';
 import { CreateServerSettingDto } from './dto/create-server-setting.dto';
