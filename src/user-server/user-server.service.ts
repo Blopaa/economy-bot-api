@@ -1,7 +1,7 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorDto } from 'src/dto/error.dto';
-import { UserServer } from 'src/entities/user_server.entity';
+import { UserServer } from 'src/user-server/entities/user_server.entity';
 import { ServerService } from 'src/server/server.service';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';

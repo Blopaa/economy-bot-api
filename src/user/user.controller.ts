@@ -24,7 +24,7 @@ export class UserController {
     });
   }
 
-  @Get()
+  @Get('/:userId')
   async getByDiscordId(@Param('userId') userId: string) {
     return await this.userService
       .getUserByDiscordId(userId)
