@@ -5,9 +5,10 @@ import { ServerModule } from 'src/server/server.module';
 import { UserModule } from 'src/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserServer } from './entities/user_server.entity';
+import { ItemsModule } from 'src/items/items.module';
 
 @Module({
-  imports: [ServerModule, UserModule, TypeOrmModule.forFeature([UserServer])],
+  imports: [ServerModule, UserModule, TypeOrmModule.forFeature([UserServer]), ItemsModule],
   controllers: [UserServerController],
   providers: [UserServerService]
 })

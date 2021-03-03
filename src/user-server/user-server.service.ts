@@ -7,6 +7,7 @@ import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { CreateUserServerDto } from './dto/create-user-server.dto';
 import { UpdateUserServerDto } from './dto/update-user-server.dto';
+import { ItemsService } from 'src/items/items.service';
 
 @Injectable()
 export class UserServerService {
@@ -19,6 +20,9 @@ export class UserServerService {
 
     @Inject(UserService)
     private userService: UserService,
+
+    @Inject(ItemsService)
+    private itemService: ItemsService,
   ) {}
 
   async create(serverId: string, userId: string): Promise<void> {
@@ -144,13 +148,43 @@ export class UserServerService {
     }
   }
 
+  async buyItems({
+    serverId,
+    userId,
+    itemId,
+  }: {
+    serverId: string;
+    userId: string;
+    itemId: string;
+  }) {
+    const userServer = await this.findOne(userId, serverId);
+    const item = await this.itemService.findOne(+itemId);
+    userServer.item = [...userServer.item, item];
+    userServer.coins -= item.price;
+    this.userServerRepository.save(userServer);
+  }
+
+  async useItems({ serverId, userId, itemId }) {
+    const userServer = await this.findOne(userId, serverId);
+    const item = userServer.item.find((e) => e.id === itemId);
+    userServer.item = userServer.item.filter((e) => e.id != item.id);
+
+    return item.mesage;
+  }
+
   // findAll() {
   //   return `This action returns all userServer`;
   // }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} userServer`;
-  // }
+  async findOne(userId: string, serverId: string) {
+    const server = await this.serverService.getServerByDiscordId(serverId);
+    const user = await this.userService.getUserByDiscordId(userId);
+    const userServer = await this.userServerRepository.findOneOrFail({
+      where: { server, user },
+      relations: ['item', 'server', 'user'],
+    });
+    return userServer;
+  }
 
   // update(id: number, updateUserServerDto: UpdateUserServerDto) {
   //   return `This action updates a #${id} userServer`;

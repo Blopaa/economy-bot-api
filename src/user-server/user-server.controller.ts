@@ -31,7 +31,16 @@ export class UserServerController {
 
   @Put('/coins')
   async updateCoins(
-    @Body() {customCoinsSet, serverId, userId}: { customCoinsSet: number; serverId: string; userId: string },
+    @Body()
+    {
+      customCoinsSet,
+      serverId,
+      userId,
+    }: {
+      customCoinsSet: number;
+      serverId: string;
+      userId: string;
+    },
   ) {
     await this.userServerService
       .updateCoins(serverId, userId, customCoinsSet)
@@ -43,7 +52,12 @@ export class UserServerController {
   @Put('/sharecoins')
   async shareCoins(
     @Body()
-    {customCoinsSet, payedId, payerId, serverId}: {
+    {
+      customCoinsSet,
+      payedId,
+      payerId,
+      serverId,
+    }: {
       customCoinsSet: number;
       payerId: string;
       payedId: string;
@@ -63,12 +77,19 @@ export class UserServerController {
   }
 
   @Get('/coins/:userId/:serverId')
-  async getUserCoins(@Param() {serverId, userId}: { serverId: string; userId: string }) {
+  async getUserCoins(
+    @Param() { serverId, userId }: { serverId: string; userId: string },
+  ) {
     return this.userServerService
       .getUserCoins(serverId, userId)
       .catch((err: ErrorDto) => {
         throw new HttpException(err.message, err.status);
       });
+  }
+
+  @Post()
+  async butItems(@Body() b: {serverId: string, userId: string, itemId: string}){
+    this.userServerService.buyItems(b)
   }
 
   // @Get()

@@ -8,6 +8,8 @@ import { UserModule } from './user/user.module';
 import { ServerModule } from './server/server.module';
 import { ServerSettingsModule } from './server-settings/server-settings.module';
 import { UserServerModule } from './user-server/user-server.module';
+import { StoreModule } from './store/store.module';
+import { ItemsModule } from './items/items.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { UserServerModule } from './user-server/user-server.module';
     ServerModule,
     ServerSettingsModule,
     UserServerModule,
+    StoreModule,
+    ItemsModule,
   ],
   controllers: [],
   providers: [],

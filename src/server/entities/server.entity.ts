@@ -1,3 +1,4 @@
+import { Store } from "src/store/entities/store.entity";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { BaseEntity } from "../../entities/baseEntity.entity";
 import { ServerSettings } from "../../server-settings/entities/server-settings.entity";
@@ -14,4 +15,7 @@ export class Server extends BaseEntity {
     @OneToOne(() => ServerSettings, ss => ss.server)
     @JoinColumn()
     serverSettings: ServerSettings;
+    @OneToOne(() => Store, store => store.server)
+    @JoinColumn()
+    store: Store
 }
