@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, HttpException } from '@nestjs/common';
 import { StoreService } from './store.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
+import { ErrorDto } from 'src/dto/error.dto';
 
 @Controller('store')
 export class StoreController {
@@ -9,7 +10,9 @@ export class StoreController {
 
   @Post()
   create(@Body() createStoreDto: CreateStoreDto) {
-    return this.storeService.create(createStoreDto);
+    return this.storeService.create(createStoreDto).catch((err: ErrorDto) => 
+      {throw new HttpException(err.message, err.status)}
+    );
   }
 
   // @Get()

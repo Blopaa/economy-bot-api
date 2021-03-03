@@ -1,5 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ErrorDto } from 'src/dto/error.dto';
 import { ServerService } from 'src/server/server.service';
 import { Repository } from 'typeorm';
 import { CreateStoreDto } from './dto/create-store.dto';
@@ -12,14 +13,23 @@ export class StoreService {
     @InjectRepository(Store)
     private storeRepository: Repository<Store>,
     @Inject(ServerService)
-    private serverService: ServerService
+    private serverService: ServerService,
   ) {}
 
   async create(createStoreDto: CreateStoreDto) {
-    const server = await this.serverService.getServerByDiscordId(createStoreDto.serverId)
-    const store = this.storeRepository.create();
-    store.server = server;
-    this.storeRepository.save(store);
+    const server = await this.serverService.getServerByDiscordId(
+      createStoreDto.serverId,
+    );
+    // console.log(server)
+    if (!server.store) {
+      const store = this.storeRepository.create();
+      store.server = server;
+      console.log(server)
+      this.storeRepository.save(store);
+      return
+    }
+    throw new ErrorDto(HttpStatus.BAD_REQUEST, "alredy created");
+    ;
   }
 
   // findAll() {
@@ -28,7 +38,8 @@ export class StoreService {
 
   async findOneByDiscordId(id: number) {
     return await this.storeRepository.findOneOrFail({
-      where: { server: { serverId: id } }, relations: ["item"]
+      where: { server: { serverId: id } },
+      relations: ['item'],
     });
   }
 

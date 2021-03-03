@@ -169,7 +169,7 @@ export class UserServerService {
     const item = userServer.item.find((e) => e.id === itemId);
     userServer.item = userServer.item.filter((e) => e.id != item.id);
 
-    return item.mesage;
+    return item;
   }
 
   // findAll() {

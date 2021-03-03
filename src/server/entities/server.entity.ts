@@ -16,6 +16,5 @@ export class Server extends BaseEntity {
     @JoinColumn()
     serverSettings: ServerSettings;
     @OneToOne(() => Store, store => store.server)
-    @JoinColumn()
     store: Store
 }

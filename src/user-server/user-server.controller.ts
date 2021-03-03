@@ -97,10 +97,10 @@ export class UserServerController {
   //   return this.userServerService.findAll();
   // }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.userServerService.findOne(+id);
-  // }
+  @Get(':userId/:serverId')
+  findOne(@Param() p: {userId: string, serverId: string}) {
+    return this.userServerService.findOne(p.userId, p.serverId);
+  }
 
   // @Put(':id')
   // update(

@@ -12,7 +12,7 @@ export class Item extends BaseEntity {
   @Column()
   description: string;
   @Column()
-  mesage: string;
+  mesage:string
   @Column()
   type: 'other' | 'role';
   @ManyToOne(() => Store, (store) => store.item)

@@ -6,6 +6,7 @@ import { Server } from '../../server/entities/server.entity';
 @Entity()
 export class Store extends BaseEntity {
   @OneToOne(() => Server, (server) => server.store)
+  @JoinColumn()
   server: Server;
   @ManyToOne(() => Item, (item) => item.store)
   @JoinColumn()

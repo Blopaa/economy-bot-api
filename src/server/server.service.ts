@@ -53,7 +53,7 @@ export class ServerService {
       const server = this.serverRepository
         .findOneOrFail({
           where: { serverId: serverId },
-          relations: ['serverSettings'],
+          relations: ['serverSettings', 'store'],
         })
         .catch(() => {
           throw new ErrorDto(HttpStatus.NOT_FOUND, 'server not found');
