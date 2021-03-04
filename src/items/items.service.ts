@@ -18,11 +18,12 @@ export class ItemsService {
   async create(createItemDto: CreateItemDto) {
     const item = this.itemRepository.create(createItemDto);
     const store = await this.storeService.findOneByDiscordId(
-      createItemDto.storeId,
+      createItemDto?.serverId,
     );
     item.store = store;
-    const savedItem = this.itemRepository.save(item);
-    return savedItem;
+    await this.itemRepository.save(item);
+
+    console.log(createItemDto.serverId.toString());
   }
 
   // findAll() {

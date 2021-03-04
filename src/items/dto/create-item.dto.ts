@@ -3,6 +3,6 @@ export class CreateItemDto {
     price: number;
     description: string;
     message: string;
-    type: 'other' | 'role';
-    storeId: number;
+    type: 'no role' | 'role';
+    serverId: string;
 }

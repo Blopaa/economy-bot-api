@@ -24,22 +24,23 @@ export class StoreService {
     if (!server.store) {
       const store = this.storeRepository.create();
       store.server = server;
-      console.log(server)
       this.storeRepository.save(store);
-      return
+      return;
     }
-    throw new ErrorDto(HttpStatus.BAD_REQUEST, "alredy created");
-    ;
+    throw new ErrorDto(HttpStatus.BAD_REQUEST, 'alredy created');
   }
 
   // findAll() {
   //   return `This action returns all store`;
   // }
 
-  async findOneByDiscordId(id: number) {
+  async findOneByDiscordId(id: string) {
+    const server = await this.serverService.getServerByDiscordId(id);
     return await this.storeRepository.findOneOrFail({
-      where: { server: { serverId: id } },
-      relations: ['item'],
+      where: { server },
+      relations: ['items'],
+    }).catch((err) => {
+      throw new ErrorDto(HttpStatus.NOT_FOUND, "not found")
     });
   }
 

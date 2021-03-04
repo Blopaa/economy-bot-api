@@ -161,7 +161,7 @@ export class UserServerService {
     const item = await this.itemService.findOne(+itemId);
     userServer.item = [...userServer.item, item];
     userServer.coins -= item.price;
-    this.userServerRepository.save(userServer);
+    await this.userServerRepository.save(userServer);
   }
 
   async useItems({ serverId, userId, itemId }) {

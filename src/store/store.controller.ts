@@ -22,7 +22,10 @@ export class StoreController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.storeService.findOneByDiscordId(+id);
+    return this.storeService.findOneByDiscordId(id).catch((err: ErrorDto) => {
+      throw new HttpException(err.message, err.status);
+      
+    });
   }
 
   // @Put(':id')
