@@ -148,30 +148,6 @@ export class UserServerService {
     }
   }
 
-  async buyItems({
-    serverId,
-    userId,
-    itemId,
-  }: {
-    serverId: string;
-    userId: string;
-    itemId: string;
-  }) {
-    const userServer = await this.findOne(userId, serverId);
-    const item = await this.itemService.findOne(+itemId);
-    userServer.item = [...userServer.item, item];
-    userServer.coins -= item.price;
-    await this.userServerRepository.save(userServer);
-  }
-
-  async useItems({ serverId, userId, itemId }) {
-    const userServer = await this.findOne(userId, serverId);
-    const item = userServer.item.find((e) => e.id === itemId);
-    userServer.item = userServer.item.filter((e) => e.id != item.id);
-
-    return item;
-  }
-
   // findAll() {
   //   return `This action returns all userServer`;
   // }
@@ -181,7 +157,7 @@ export class UserServerService {
     const user = await this.userService.getUserByDiscordId(userId);
     const userServer = await this.userServerRepository.findOneOrFail({
       where: { server, user },
-      relations: ['item', 'server', 'user'],
+      relations: ['userServerItem', 'server', 'user', 'userServerItem.item'],
     });
     return userServer;
   }

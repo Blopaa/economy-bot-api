@@ -1,4 +1,5 @@
 import { Item } from 'src/items/entities/item.entity';
+import { UserServerItem } from 'src/user-server-item/entities/user-server-item.entity';
 import {
   Column,
   Entity,
@@ -6,6 +7,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   OneToOne,
 } from 'typeorm';
 import { BaseEntity } from '../../entities/baseEntity.entity';
@@ -24,7 +26,6 @@ export class UserServer extends BaseEntity {
   @ManyToOne(() => Server, (server) => server.userServer, { nullable: false })
   @JoinColumn()
   server: Server;
-  @ManyToMany(() => Item, item => item.userServer)
-  @JoinTable()
-  item: Item[];
+  @OneToMany(() => UserServerItem, userServeritem =>  userServeritem.userServer)
+  userServerItem: UserServerItem[];
 }

@@ -87,11 +87,6 @@ export class UserServerController {
       });
   }
 
-  @Post('/buy')
-  async buyItems(@Body() b: {serverId: string, userId: string, itemId: string}){
-    this.userServerService.buyItems(b)
-  }
-
   // @Get()
   // findAll() {
   //   return this.userServerService.findAll();

@@ -10,6 +10,7 @@ import { ServerSettingsModule } from './server-settings/server-settings.module';
 import { UserServerModule } from './user-server/user-server.module';
 import { StoreModule } from './store/store.module';
 import { ItemsModule } from './items/items.module';
+import { UserServerItemModule } from './user-server-item/user-server-item.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ItemsModule } from './items/items.module';
     UserServerModule,
     StoreModule,
     ItemsModule,
+    UserServerItemModule,
   ],
   controllers: [],
   providers: [],

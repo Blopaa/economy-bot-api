@@ -1,7 +1,8 @@
 import { BaseEntity } from 'src/entities/baseEntity.entity';
 import { Store } from 'src/store/entities/store.entity';
+import { UserServerItem } from 'src/user-server-item/entities/user-server-item.entity';
 import { UserServer } from 'src/user-server/entities/user_server.entity';
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Item extends BaseEntity {
@@ -18,6 +19,6 @@ export class Item extends BaseEntity {
   @ManyToOne(() => Store, (store) => store.items)
   @JoinColumn()
   store: Store;
-  @ManyToMany(() => UserServer, (userServer) => userServer.item)
-  userServer: UserServer[];
+  @OneToMany(() => UserServerItem, userServeritem =>  userServeritem.userServer)
+  userServerItem: UserServerItem[];
 }

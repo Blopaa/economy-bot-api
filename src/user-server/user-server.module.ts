@@ -10,6 +10,7 @@ import { ItemsModule } from 'src/items/items.module';
 @Module({
   imports: [ServerModule, UserModule, TypeOrmModule.forFeature([UserServer]), ItemsModule],
   controllers: [UserServerController],
-  providers: [UserServerService]
+  providers: [UserServerService],
+  exports: [UserServerService]
 })
 export class UserServerModule {}
