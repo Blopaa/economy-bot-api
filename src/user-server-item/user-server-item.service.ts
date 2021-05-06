@@ -38,9 +38,11 @@ export class UserServerItemService {
     const prev = await this.userServerItemRepository.findOne({
       where: { userServer, item },
     });
+    if (item.type === 'role') return;
+
     if (prev) {
-      prev.quantity++
-      this.userServerItemRepository.save(prev)
+      prev.quantity++;
+      this.userServerItemRepository.save(prev);
     } else {
       const userServerItem = this.userServerItemRepository.create();
       userServerItem.item = item;
