@@ -19,7 +19,14 @@ export class UserServerItemController {
   async buyItems(
     @Body() b: { serverId: string; userId: string; itemId: string },
   ) {
-    this.userServerItemService.buyItems(b);
+    await this.userServerItemService.buyItems(b);
+  }
+  
+  @Post('/use')
+  async useItem(
+    @Body() b: { serverId: string; userId: string; itemId: string },
+  ) {
+    return await this.userServerItemService.useItems(b);
   }
 
   // @Post()

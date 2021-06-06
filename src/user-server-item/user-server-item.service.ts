@@ -54,13 +54,17 @@ export class UserServerItemService {
     }
   }
 
-  // async useItems({ serverId, userId, itemId }) {
-  //   const userServer = await this.findOne(userId, serverId);
-  //   const item = userServer.item.find((e) => e.id === itemId);
-  //   userServer.item = userServer.item.filter((e) => e.id != item.id);
+  async useItems({ serverId, userId, itemId }) {
+    const userServerItem = await this.findOne(serverId, itemId, userId);
+    userServerItem.quantity > 1
+      ? (userServerItem.quantity -= 1)
+      : this.remove(userServerItem.id);
 
-  //   return item;
-  // }
+      console.log(userServerItem)
+      await this.userServerItemRepository.save(userServerItem)
+
+    return userServerItem.item;
+  }
 
   // create(createUserServerItemDto: CreateUserServerItemDto) {
   //   return 'This action adds a new userServerItem';
@@ -70,15 +74,25 @@ export class UserServerItemService {
   //   return `This action returns all userServerItem`;
   // }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} userServerItem`;
-  // }
+  async findOne(
+    serverId: string,
+    itemId: number,
+    userId: string,
+  ): Promise<UserServerItem> {
+    const item = await this.itemService.findOne(+itemId);
+    const userServer = await this.userServerServices.findOne(userId, serverId);
+    const userServerItem = await this.userServerItemRepository.findOne({
+      where: { userServer, item },
+      relations: ['item', 'userServer'],
+    });
+    return userServerItem;
+  }
 
   // update(id: number, updateUserServerItemDto: UpdateUserServerItemDto) {
   //   return `This action updates a #${id} userServerItem`;
   // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} userServerItem`;
-  // }
+  async remove(id: number) {
+    await this.userServerItemRepository.delete(id);
+  }
 }
