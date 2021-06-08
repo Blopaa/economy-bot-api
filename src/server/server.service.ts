@@ -14,10 +14,11 @@ export class ServerService {
     private serverRepository: Repository<Server>,
 
     @InjectRepository(ServerSettings)
-    private serverSettingsRespository: Repository<ServerSettings>
+    private serverSettingsRespository: Repository<ServerSettings>,
   ) {}
 
   async createServer(newServer: CreateServerDto): Promise<void> {
+    console.log(newServer);
     try {
       if (!newServer)
         throw new ErrorDto(
@@ -25,24 +26,18 @@ export class ServerService {
           'not enought data, server must have discordId and name',
         );
       const server = await this.serverRepository.create(newServer);
-      await this.serverRepository
-        .save(server)
-        .catch(() => {
-          throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
-        });
+      await this.serverRepository.save(server).catch(() => {
+        throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
+      });
       const serverSettings = await this.serverSettingsRespository.create();
-      await this.serverSettingsRespository
-        .save(serverSettings)
-        .catch(() => {
-          throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
-        });
+      await this.serverSettingsRespository.save(serverSettings).catch(() => {
+        throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
+      });
 
       server.serverSettings = serverSettings;
-      await this.serverRepository
-        .save(server)
-        .catch(() => {
-          throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
-        });
+      await this.serverRepository.save(server).catch(() => {
+        throw new ErrorDto(HttpStatus.CONFLICT, 'server alredy created');
+      });
     } catch (err) {
       throw err;
     }

@@ -56,12 +56,19 @@ export class UserServerItemService {
 
   async useItems({ serverId, userId, itemId }) {
     const userServerItem = await this.findOne(serverId, itemId, userId);
-    userServerItem.quantity > 1
-      ? (userServerItem.quantity -= 1)
-      : this.remove(userServerItem.id);
+    // console.log(userServerItem.quantity > 1);
+    console.log(userServerItem.id);
+    console.log(userServerItem.quantity);
+    if (userServerItem.quantity > 1) {
+      userServerItem.quantity -= 1;
+    } else {
+      console.log('here');
+      await this.remove(userServerItem.id);
+    }
 
-      console.log(userServerItem)
-      await this.userServerItemRepository.save(userServerItem)
+    // console.log(userServerItem);
+
+    await this.userServerItemRepository.merge(userServerItem);
 
     return userServerItem.item;
   }
@@ -93,6 +100,7 @@ export class UserServerItemService {
   // }
 
   async remove(id: number) {
-    await this.userServerItemRepository.delete(id);
+    console.log('removing');
+    await this.userServerItemRepository.delete(id).catch((e) => console.log(e));
   }
 }

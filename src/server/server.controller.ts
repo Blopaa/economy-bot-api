@@ -17,7 +17,7 @@ import { ErrorDto } from 'src/dto/error.dto';
 export class ServerController {
   constructor(private readonly serverService: ServerService) {}
 
-  @Post()
+  @Post('')
   async create(@Body() createServerDto: CreateServerDto) {
     return await this.serverService
       .createServer(createServerDto)

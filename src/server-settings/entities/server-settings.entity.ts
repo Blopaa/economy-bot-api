@@ -31,6 +31,8 @@ export class ServerSettings extends BaseEntity {
   @Column({ nullable: true })
   welcomeChannelId: string;
 
-  @OneToOne(() => Server, (server) => server.serverSettings, {nullable: false})
+  @OneToOne(() => Server, (server) => server.serverSettings, {
+    nullable: false,
+  })
   server: Server;
 }
