@@ -1,4 +1,4 @@
 export class CreateServerDto {
-    name: string;
-    serverId: string;
+  name: string;
+  serverId: string;
 }

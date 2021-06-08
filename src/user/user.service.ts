@@ -16,14 +16,12 @@ export class UserService {
   async createUser(newUser: CreateUserDto): Promise<void> {
     try {
       const user = await this.userRepository.create(newUser);
-      await this.userRepository
-        .save(user)
-        .catch(() => {
-          throw new ErrorDto(
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            "couldn't save user, maybe not providing all data needed",
-          );
-        });
+      await this.userRepository.save(user).catch(() => {
+        throw new ErrorDto(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          "couldn't save user, maybe not providing all data needed",
+        );
+      });
     } catch (err) {
       throw err;
     }

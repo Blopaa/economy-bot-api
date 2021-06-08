@@ -93,7 +93,7 @@ export class UserServerController {
   // }
 
   @Get(':userId/:serverId')
-  findOne(@Param() p: {userId: string, serverId: string}) {
+  findOne(@Param() p: { userId: string; serverId: string }) {
     return this.userServerService.findOne(p.userId, p.serverId);
   }
 

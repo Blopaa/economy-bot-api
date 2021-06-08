@@ -1,3 +1,3 @@
 export class CreateStoreDto {
-    serverId: string;
+  serverId: string;
 }

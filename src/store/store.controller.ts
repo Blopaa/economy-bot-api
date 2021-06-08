@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, HttpException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  HttpException,
+} from '@nestjs/common';
 import { StoreService } from './store.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
@@ -10,9 +19,9 @@ export class StoreController {
 
   @Post()
   create(@Body() createStoreDto: CreateStoreDto) {
-    return this.storeService.create(createStoreDto).catch((err: ErrorDto) => 
-      {throw new HttpException(err.message, err.status)}
-    );
+    return this.storeService.create(createStoreDto).catch((err: ErrorDto) => {
+      throw new HttpException(err.message, err.status);
+    });
   }
 
   // @Get()
@@ -24,7 +33,6 @@ export class StoreController {
   findOne(@Param('id') id: string) {
     return this.storeService.findOneByDiscordId(id).catch((err: ErrorDto) => {
       throw new HttpException(err.message, err.status);
-      
     });
   }
 

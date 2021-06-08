@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, HttpException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  HttpException,
+} from '@nestjs/common';
 import { ServerSettingsService } from './server-settings.service';
 import { CreateServerSettingDto } from './dto/create-server-setting.dto';
 import { UpdateServerSettingDto } from './dto/update-server-setting.dto';

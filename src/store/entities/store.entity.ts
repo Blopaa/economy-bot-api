@@ -8,6 +8,6 @@ export class Store extends BaseEntity {
   @OneToOne(() => Server, (server) => server.store)
   @JoinColumn()
   server: Server;
-  @OneToMany(() => Item, (item) => item.store,)
+  @OneToMany(() => Item, (item) => item.store)
   items: Item[];
 }

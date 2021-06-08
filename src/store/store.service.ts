@@ -36,12 +36,14 @@ export class StoreService {
 
   async findOneByDiscordId(id: string) {
     const server = await this.serverService.getServerByDiscordId(id);
-    return await this.storeRepository.findOneOrFail({
-      where: { server },
-      relations: ['items'],
-    }).catch((err) => {
-      throw new ErrorDto(HttpStatus.NOT_FOUND, "not found")
-    });
+    return await this.storeRepository
+      .findOneOrFail({
+        where: { server },
+        relations: ['items'],
+      })
+      .catch((err) => {
+        throw new ErrorDto(HttpStatus.NOT_FOUND, 'not found');
+      });
   }
 
   // update(id: number, updateStoreDto: UpdateStoreDto) {

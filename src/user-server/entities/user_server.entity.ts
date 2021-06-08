@@ -26,6 +26,9 @@ export class UserServer extends BaseEntity {
   @ManyToOne(() => Server, (server) => server.userServer, { nullable: false })
   @JoinColumn()
   server: Server;
-  @OneToMany(() => UserServerItem, userServeritem =>  userServeritem.userServer)
+  @OneToMany(
+    () => UserServerItem,
+    (userServeritem) => userServeritem.userServer,
+  )
   userServerItem: UserServerItem[];
 }

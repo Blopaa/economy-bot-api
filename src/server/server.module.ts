@@ -6,9 +6,12 @@ import { Server } from 'src/server/entities/server.entity';
 import { ServerSettings } from 'src/server-settings/entities/server-settings.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Server]), TypeOrmModule.forFeature([ServerSettings])],
+  imports: [
+    TypeOrmModule.forFeature([Server]),
+    TypeOrmModule.forFeature([ServerSettings]),
+  ],
   controllers: [ServerController],
   providers: [ServerService],
-  exports: [ServerService]
+  exports: [ServerService],
 })
 export class ServerModule {}

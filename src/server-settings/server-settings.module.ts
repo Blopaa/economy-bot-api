@@ -8,6 +8,6 @@ import { ServerSettings } from './entities/server-settings.entity';
 @Module({
   imports: [ServerModule, TypeOrmModule.forFeature([ServerSettings])],
   controllers: [ServerSettingsController],
-  providers: [ServerSettingsService]
+  providers: [ServerSettingsService],
 })
 export class ServerSettingsModule {}
